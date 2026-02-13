@@ -1,39 +1,144 @@
-<h1>Will You Be My Valentine? ❤️</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise for My Love</title>
+<style>
+    body {
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: #fff;
+    }
+    .container {
+        background: rgba(255, 0, 100, 0.85);
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        width: 350px;
+        z-index: 10;
+    }
+    h1 {
+        margin-bottom: 20px;
+        font-size: 26px;
+    }
+    input {
+        width: 80%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: none;
+    }
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 15px;
+        background-color: #fff;
+        color: #ff3366;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #ff3366;
+        color: #fff;
+    }
+    #message {
+        display: none;
+        background: rgba(255, 105, 180, 0.85);
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 20px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+    .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        transform: rotate(45deg);
+        animation: fall linear infinite;
+    }
+    .heart::before,
+    .heart::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
 
-<div class="slider">Our Memories Here ❤️</div>
+    @keyframes fall {
+        0% { transform: translateY(-50px) rotate(45deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+    }
+</style>
+</head>
+<body>
 
-<button class="yes" onclick="yesClicked()">YES 💖</button>
-<button class="no" id="noBtn">No 😢</button>
-
-<p class="message" id="personalMessage">
-Hi baby happy valentines day, I know the past few days hasn't been the best for us and we have been fighting a lot but even tho sometimes it was my fault you decided to put ur ego aside and still said sorry to me I'm really grateful for that, I hope ur my valentines for the rest of the upcoming valentines I'll get in my life until I die I love you so much baby ❤️
-</p>
-
-<div class="polaroid-section">
-  <div class="polaroid-title">Our Memories 📸</div>
-  <div class="polaroid-grid">
-    <div class="polaroid" style="--r:-8deg">Cutest moment</div>
-    <div class="polaroid" style="--r:6deg">Favourite smile</div>
-    <div class="polaroid" style="--r:-5deg">So adorable</div>
-    <div class="polaroid" style="--r:7deg">Perfect together</div>
-    <div class="polaroid" style="--r:-4deg">Love this day</div>
-    <div class="polaroid" style="--r:5deg">Forever us</div>
-  </div>
+<div class="container">
+    <h1>💌 Valentine Surprise 💌</h1>
+    <input type="text" id="yourName" placeholder="Your Name">
+    <input type="text" id="bfName" placeholder="His Name">
+    <br>
+    <button onclick="showSurprise()">See Your Valentine Surprise 💖</button>
 </div>
 
-<div class="quiz-section">
-  <h2>Valentine Quiz 💌</h2>
+<div id="message"></div>
 
-  <div class="quiz-question">
-    <p>1. What was I wearing on our first day?</p>
-    <label><input type="radio" name="q1" value="wrong">❤️ Hoodie and sweatpants</label><br>
-    <label><input type="radio" name="q1" value="wrong">❤️ Crop top and jeans</label><br>
-    <label><input type="radio" name="q1" value="correct">❤️ Black t-shirt and blue jeans</label><br>
-    <label><input type="radio" name="q1" value="wrong">❤️ Baggy pants and baggy jeans</label><br>
-  </div>
+<script>
+function showSurprise() {
+    const yourName = document.getElementById('yourName').value.trim();
+    const bfName = document.getElementById('bfName').value.trim();
 
-  <!-- Repeat for all quiz questions (from your final code) -->
+    if(yourName === '' || bfName === '') {
+        alert('Please enter both names!');
+        return;
+    }
 
-  <button id="submitQuiz" onclick="submitQuiz()">Submit Quiz</button>
-  <div id="quizResult"></div>
-</div>
+    const messageDiv = document.getElementById('message');
+    messageDiv.style.display = 'block';
+    messageDiv.textContent = 
+`Hi baby happy Valentine's day, I know the past few days hasn't been the best for us and we have been fighting a lot, but even though sometimes it was my fault, you decided to put your ego aside and still said sorry to me. I'm really grateful for that. I hope you're my Valentine for the rest of the upcoming Valentines I'll get in my life until I die. I love you so much, baby 💖`;
+
+    createHearts(30);
+}
+
+// Falling hearts function
+function createHearts(number) {
+    for(let i=0; i<number; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+        heart.style.opacity = Math.random();
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }
+}
+
+// Continuously spawn hearts for effect
+setInterval(() => {
+    createHearts(2);
+}, 1000);
+</script>
+
+</body>
+</html>
