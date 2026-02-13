@@ -1,144 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Surprise for My Love</title>
-<style>
-    body {
-        font-family: 'Comic Sans MS', cursive, sans-serif;
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        background: linear-gradient(120deg, #ff9a9e, #fad0c4);
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        color: #fff;
-    }
-    .container {
-        background: rgba(255, 0, 100, 0.85);
-        padding: 30px;
-        border-radius: 20px;
-        text-align: center;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        width: 350px;
-        z-index: 10;
-    }
-    h1 {
-        margin-bottom: 20px;
-        font-size: 26px;
-    }
-    input {
-        width: 80%;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 10px;
-        border: none;
-    }
-    button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 15px;
-        background-color: #fff;
-        color: #ff3366;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-        margin-top: 10px;
-    }
-    button:hover {
-        background-color: #ff3366;
-        color: #fff;
-    }
-    #message {
-        display: none;
-        background: rgba(255, 105, 180, 0.85);
-        padding: 20px;
-        border-radius: 20px;
-        margin-top: 20px;
-        font-size: 16px;
-        line-height: 1.4;
-    }
-    .heart {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: red;
-        transform: rotate(45deg);
-        animation: fall linear infinite;
-    }
-    .heart::before,
-    .heart::after {
-        content: '';
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: red;
-        border-radius: 50%;
-    }
-    .heart::before { top: -10px; left: 0; }
-    .heart::after { left: 10px; top: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Ask Out</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+        }
+        .container {
+            background: rgba(255, 0, 100, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 320px;
+            z-index: 10;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 15px;
+            background-color: #fff;
+            color: #ff3366;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #ff3366;
+            color: #fff;
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 100, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 20;
+            width: 300px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        #popup button {
+            margin: 10px;
+        }
+        #finalMessage {
+            display: none;
+            background: rgba(255, 105, 180, 0.85);
+            padding: 20px;
+            border-radius: 20px;
+            max-width: 400px;
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            transform: rotate(45deg);
+            animation: fall linear infinite;
+        }
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+        }
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { left: 10px; top: 0; }
 
-    @keyframes fall {
-        0% { transform: translateY(-50px) rotate(45deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
-    }
-</style>
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(45deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>💌 Valentine Surprise 💌</h1>
-    <input type="text" id="yourName" placeholder="Your Name">
-    <input type="text" id="bfName" placeholder="His Name">
-    <br>
-    <button onclick="showSurprise()">See Your Valentine Surprise 💖</button>
-</div>
+    <div class="container">
+        <h1>💌 Valentine Ask Out 💌</h1>
+        <input type="text" id="yourName" placeholder="Your Name">
+        <input type="text" id="crushName" placeholder="Their Name">
+        <br>
+        <button onclick="askValentine()">Send 💖</button>
+    </div>
 
-<div id="message"></div>
+    <div id="popup">
+        <p>Hi ❤️, will you be my Valentine?</p>
+        <button onclick="showMessage(true)">Yes 💘</button>
+        <button onclick="showMessage(false)">No 😢</button>
+    </div>
 
-<script>
-function showSurprise() {
-    const yourName = document.getElementById('yourName').value.trim();
-    const bfName = document.getElementById('bfName').value.trim();
+    <div id="finalMessage"></div>
 
-    if(yourName === '' || bfName === '') {
-        alert('Please enter both names!');
-        return;
-    }
+    <script>
+        function askValentine() {
+            const yourName = document.getElementById('yourName').value.trim();
+            const crushName = document.getElementById('crushName').value.trim();
 
-    const messageDiv = document.getElementById('message');
-    messageDiv.style.display = 'block';
-    messageDiv.textContent = 
-`Hi baby happy Valentine's day, I know the past few days hasn't been the best for us and we have been fighting a lot, but even though sometimes it was my fault, you decided to put your ego aside and still said sorry to me. I'm really grateful for that. I hope you're my Valentine for the rest of the upcoming Valentines I'll get in my life until I die. I love you so much, baby 💖`;
+            if(yourName === '' || crushName === '') {
+                alert('Please fill in both names!');
+                return;
+            }
 
-    createHearts(30);
-}
+            // Show popup
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+            popup.querySelector('p').textContent = `Hi ${crushName} ❤️, will you be my Valentine?`;
+        }
 
-// Falling hearts function
-function createHearts(number) {
-    for(let i=0; i<number; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.animationDuration = (3 + Math.random() * 3) + 's';
-        heart.style.opacity = Math.random();
-        document.body.appendChild(heart);
+        function showMessage(isYes) {
+            const popup = document.getElementById('popup');
+            const finalMessage = document.getElementById('finalMessage');
+            popup.style.display = 'none';
 
-        setTimeout(() => {
-            heart.remove();
-        }, 6000);
-    }
-}
+            if(isYes) {
+                finalMessage.style.display = 'block';
+                finalMessage.textContent = 
+`Hi baby happy Valentine's day, I know the past few days hasn't been the best for us and we have been fighting a lot but even though sometimes it was my fault you decided to put your ego aside and still said sorry to me. I'm really grateful for that. I hope you're my Valentine for the rest of the upcoming Valentines I'll get in my life until I die. I love you so much, baby 💖`;
+                
+                // Start falling hearts animation
+                createHearts(30);
+            } else {
+                finalMessage.style.display = 'block';
+                finalMessage.textContent = "Oh 😢, maybe next time. I still care about you!";
+            }
+        }
 
-// Continuously spawn hearts for effect
-setInterval(() => {
-    createHearts(2);
-}, 1000);
-</script>
+        // Function to create falling hearts
+        function createHearts(number) {
+            for(let i=0; i<number; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+                heart.style.opacity = Math.random();
+                document.body.appendChild(heart);
+
+                // Remove heart after it falls
+                setTimeout(() => {
+                    heart.remove();
+                }, 6000);
+            }
+        }
+
+        // Optional: keep creating hearts every second
+        setInterval(() => {
+            createHearts(2);
+        }, 1000);
+    </script>
 
 </body>
 </html>
