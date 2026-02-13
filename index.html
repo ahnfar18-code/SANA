@@ -9,51 +9,68 @@
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: radial-gradient(circle at top left, #ff5f8f, #ff9aa2, #ffd6e0);
+    background: radial-gradient(circle at top left, #ff3366, #ff668a, #ffc0cb);
     overflow: hidden;
     font-family: 'Poppins', sans-serif;
     color: #fff;
-  }
-  .card {
-    position: relative;
-    z-index: 10;
-    background: rgba(0,0,0,0.5);
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    width: min(700px, 90%);
-    padding: 30px;
-    margin: 40px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
   }
+  .card {
+    background: rgba(0,0,0,0.6);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    width: min(700px, 90%);
+    padding: 35px;
+    position: relative;
+    z-index: 10;
+  }
   h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 10px rgba(255,255,255,0.5);
   }
   p, button {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   button {
-    background-color: #fff;
-    color: #e60050;
     border: none;
     border-radius: 12px;
-    padding: 10px 20px;
+    padding: 10px 25px;
     cursor: pointer;
     font-weight: bold;
     margin: 10px;
     transition: 0.3s;
   }
-  button:hover {
+  #yes {
+    background-color: #fff;
+    color: #e60050;
+    font-size: 1.3rem;
+    padding: 14px 30px;
+    transform: scale(1.1);
+  }
+  #yes:hover {
     background-color: #e60050;
     color: #fff;
+    transform: scale(1.15);
+  }
+  #no {
+    background-color: #fff;
+    color: #e60050;
+    position: relative;
+  }
+  #no:hover {
+    background-color: #ffcccc;
   }
   .choices {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     margin-top: 20px;
+    position: relative;
   }
   .overlay {
     display: none;
@@ -61,23 +78,24 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.8);
-    padding: 30px;
+    background: rgba(0,0,0,0.9);
+    padding: 35px;
     border-radius: 20px;
     text-align: center;
     color: #fff;
     z-index: 50;
     width: 80%;
-    max-width: 400px;
+    max-width: 420px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
   }
   #finalBox {
     display: none;
-    margin-top: 20px;
-    background: rgba(0,0,0,0.5);
-    padding: 20px;
+    margin-top: 25px;
+    background: rgba(0,0,0,0.6);
+    padding: 25px;
     border-radius: 15px;
-    line-height: 1.6;
-    font-size: 1.1rem;
+    line-height: 1.7;
+    font-size: 1.15rem;
   }
   .heart {
     position: fixed;
@@ -108,20 +126,20 @@
 <body>
 
 <div class="card">
-  <h1>💘</h1>
+  <h1>💘 Happy Valentine’s Quiz 💘</h1>
   <div id="q1">
-    <p><strong>what's my favorite cake flavour?</strong></p>
+    <p><strong>What’s my favorite cake flavor?</strong></p>
     <div class="choices">
       <button class="option" data-choice="A">A — Chocolate cake</button>
-      <button class="option" data-choice="B">B — 6. Vanila cake</button>
+      <button class="option" data-choice="B">B — Vanilla cake</button>
       <button class="option" data-choice="C">C — Red velvet cake</button>
-      <button class="option" data-choice="D">D — Cheese cake</button>
+      <button class="option" data-choice="D">D — Cheesecake</button>
     </div>
   </div>
 
   <div id="q2" style="display:none;">
     <p><strong>Will you be my Valentine?</strong></p>
-    <div class="choices">
+    <div class="choices" id="valentineChoices">
       <button id="yes">Yes 💖</button>
       <button id="no">No 😢</button>
     </div>
@@ -137,6 +155,8 @@ const q1 = document.getElementById('q1');
 const q2 = document.getElementById('q2');
 const overlay = document.getElementById('overlay');
 const finalBox = document.getElementById('finalBox');
+const noBtn = document.getElementById('no');
+const yesBtn = document.getElementById('yes');
 
 document.querySelectorAll('.option').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -144,24 +164,26 @@ document.querySelectorAll('.option').forEach(btn => {
       q1.style.display = 'none';
       q2.style.display = 'block';
     } else {
-      overlay.innerHTML = '<p style="font-size:1.2rem;">😡 Try again! 😡</p><img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="120"><br><button onclick="overlay.style.display=\'none\'">OK</button>';
+      overlay.innerHTML = '<p style="font-size:1.2rem;">😡 Try again! 😡</p><img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="140"><br><button onclick="overlay.style.display=\'none\'">OK</button>';
       overlay.style.display = 'block';
     }
   });
 });
 
-const noBtn = document.getElementById('no');
-const yesBtn = document.getElementById('yes');
-
-noBtn.addEventListener('click', () => {
-  overlay.innerHTML = '<p style="font-size:1.1rem;">💔 You are hurting my feelings ,I care about you 💔 please say yessss</p><button onclick="overlay.style.display=\'none\'">Okay 😞</button>';
-  overlay.style.display = 'block';
+// make No button fly away
+noBtn.addEventListener('mouseover', () => {
+  const cardRect = document.querySelector('.card').getBoundingClientRect();
+  const x = Math.random() * (cardRect.width - 100);
+  const y = Math.random() * (cardRect.height - 50);
+  noBtn.style.position = 'absolute';
+  noBtn.style.left = x + 'px';
+  noBtn.style.top = y + 'px';
 });
 
 yesBtn.addEventListener('click', () => {
   q2.style.display = 'none';
   finalBox.style.display = 'block';
-  finalBox.innerHTML = '<h2>Happy Valentine\'s Day! 💐</h2><p>Hi baby happy valentines day, I know the past few days hasn\'t been the best for us and we have been fighting a lot but even though sometimes it was my fault you decided to put your ego aside and still said sorry to me. I\'m really grateful for that. I hope you\'re my Valentine for the rest of the upcoming Valentines I\'ll get in my life until I die. I love you so much baby 💖</p>';
+  finalBox.innerHTML = '<h2>Happy Valentine\'s Day! 💐</h2><p>Hi baby, happy Valentine’s Day! I know the past few days haven’t been the best for us and we’ve been fighting a lot, but even though sometimes it was my fault, you put your ego aside and still said sorry to me. I’m really grateful for that. I hope you’ll be my Valentine for all the ones to come in my life until I die. I love you so much, baby 💖</p>';
   spawnHearts(30);
 });
 
