@@ -5,597 +5,177 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Valentine Surprise</title>
 <style>
-  :root{
-    --accent:#ff2d6f;
-    --soft:#ffd6e0;
-    --card: rgba(255,255,255,0.08);
-    --glass: rgba(255,255,255,0.12);
-    --text: #fff;
-    --shadow: 0 8px 30px rgba(0,0,0,0.25);
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top left, #ff5f8f, #ff9aa2, #ffd6e0);
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
   }
-
-  html,body { height:100%; margin:0; font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#ffccd9 0%, #ffeef6 60%); color:var(--text); overflow:hidden; }
-
-  /* center card */
-  .stage {
-    position:relative;
-    z-index: 10;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    pointer-events: none; /* hearts still clickable behind but UI will use pointer events on elements explicitly */
-  }
-
   .card {
-    pointer-events: auto;
-    width: min(720px, 92%);
-    max-width:720px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-    border-radius:18px;
-    padding:28px;
-    text-align:center;
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    z-index: 10;
+    background: rgba(0,0,0,0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    width: min(700px, 90%);
+    padding: 30px;
+    margin: 40px auto;
+    text-align: center;
   }
-
   h1 {
-    margin: 0 0 8px 0;
-    font-size: 26px;
-    letter-spacing: 0.3px;
-    color:#fff;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
   }
-  p.lead {
-    margin: 6px 0 20px 0;
-    color: rgba(255,255,255,0.92);
-    font-size: 15px;
+  p, button {
+    font-size: 1.1rem;
   }
-
-  /* choices grid */
-  .choices {
-    display:grid;
-    grid-template-columns: repeat(2,1fr);
-    gap:12px;
-    margin-top:10px;
-  }
-  .option-btn {
-    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.85));
-    color: var(--accent);
+  button {
+    background-color: #fff;
+    color: #e60050;
     border: none;
-    padding:14px 12px;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    transition: transform .15s ease, box-shadow .15s ease;
+    border-radius: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 10px;
+    transition: 0.3s;
   }
-  .option-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
-  .option-btn.secondary {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.12);
+  button:hover {
+    background-color: #e60050;
     color: #fff;
-    font-weight:600;
   }
-
-  /* small controls */
-  .center {
-    margin-top:18px;
+  .choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
   }
-
-  /* modal / feedback overlays */
   .overlay {
+    display: none;
     position: fixed;
-    z-index: 40;
-    left:50%;
-    top:50%;
-    transform: translate(-50%,-50%);
-    min-width: 280px;
-    max-width: 86%;
-    background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.45));
-    padding:22px;
-    border-radius:14px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
-    text-align:center;
-    color:#fff;
-    display:none;
-  }
-
-  .overlay.show { display:block; animation: pop .28s ease; }
-  @keyframes pop { from { transform: translate(-50%,-48%) scale(.96); opacity:0 } to { transform: translate(-50%,-50%) scale(1); opacity:1 } }
-
-  .overlay p { margin:10px 0 16px 0; font-size:18px; }
-
-  /* animated angry/sad face (SVG container) */
-  .face-wrap { display:flex; justify-content:center; margin-bottom:6px; }
-
-  /* final message styles */
-  #finalBox {
-    margin-top:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-    padding:16px;
-    border-radius:12px;
-    text-align:left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
     color: #fff;
-    font-size:16px;
-    line-height:1.5;
-    display:none;
+    z-index: 50;
+    width: 80%;
+    max-width: 400px;
   }
-
-  .typing { white-space:pre-wrap; font-family: "Poppins", sans-serif; }
-
-  /* small helper */
-  .muted { color: rgba(255,255,255,0.85); font-size:13px; }
-
-  /* hearts (will be appended by JS) */
+  #finalBox {
+    display: none;
+    margin-top: 20px;
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 15px;
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
   .heart {
     position: fixed;
-    pointer-events: none;
-    width: 26px;
-    height: 26px;
+    width: 20px;
+    height: 20px;
+    background: red;
     transform: rotate(45deg);
-    z-index: 2;
-    left: 0;
+    animation: fall linear infinite;
     top: -50px;
-    will-change: transform, opacity;
+    z-index: 0;
   }
   .heart::before, .heart::after {
-    content:'';
-    position:absolute;
-    width:26px; height:26px; background: radial-gradient(circle at 30% 30%, #fff4, transparent 30%), linear-gradient(180deg,#ff6ea1, #ff2d6f);
-    border-radius:50%;
-    top:-13px; left:0;
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
   }
-  .heart::after {
-    left:13px; top:0;
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { left: 10px; top: 0; }
+  @keyframes fall {
+    0% { transform: translateY(-50px) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
   }
-
-  /* small footer note */
-  .small {
-    margin-top:12px;
-    color: rgba(255,255,255,0.8);
-    font-size:13px;
-  }
-
-  /* responsive */
-  @media (max-width:420px) {
-    .choices { grid-template-columns: 1fr 1fr; gap:8px; }
-    .card { padding:20px; border-radius:14px; }
-  }
-
-  /* shake effect used when "you're hurting my feelings" appears */
-  .shake {
-    animation: shake .5s linear;
-  }
-  @keyframes shake {
-    0% { transform: translateX(0) }
-    20% { transform: translateX(-6px) }
-    40% { transform: translateX(6px) }
-    60% { transform: translateX(-4px) }
-    80% { transform: translateX(4px) }
-    100% { transform: translateX(0) }
-  }
-
 </style>
 </head>
 <body>
 
-  <div id="audioHint" style="position:fixed; right:14px; top:14px; z-index:60; color:#fff; font-size:13px;">
-    🔊 <span id="soundState">Soothing sound on</span>
-  </div>
-
-  <!-- main stage -->
-  <div class="stage">
-    <div class="card" role="main" aria-live="polite">
-      <h1>💘 A Little Valentine's Surprise</h1>
-      <p class="lead">Answer the first memory question — then enjoy the surprise.</p>
-
-      <!-- Question 1 -->
-      <div id="q1">
-        <p style="font-weight:700; font-size:18px; margin:2px 0 10px 0;">What did I wear on the day we first met?</p>
-        <div class="choices">
-          <button class="option-btn secondary" data-choice="A">A — A blue hoodie</button>
-          <button class="option-btn secondary" data-choice="B">B — White T-shirt</button>
-          <button class="option-btn" id="choiceC" data-choice="C">C — A red dress</button>
-          <button class="option-btn secondary" data-choice="D">D — Black jacket</button>
-        </div>
-        <div class="center small muted">Pick the right option to continue 💖</div>
-      </div>
-
-      <!-- Question 2 (hidden until correct) -->
-      <div id="q2" style="display:none; margin-top:18px;">
-        <p style="font-weight:700; font-size:18px; margin:2px 0 10px 0;">Will you be my Valentine?</p>
-        <div class="choices">
-          <button class="option-btn" id="btnYes">Yes 💘</button>
-          <button class="option-btn secondary" id="btnNo">No 😢</button>
-        </div>
-        <div class="center small muted">(Be honest 😉)</div>
-      </div>
-
-      <div id="finalBox" aria-live="polite"></div>
-
-      <div class="small">Made with ❤️ — press the heart buttons and enjoy ✨</div>
+<div class="card">
+  <h1>💘 A Little Valentine's Surprise 💘</h1>
+  <div id="q1">
+    <p><strong>What did I wear on the day we first met?</strong></p>
+    <div class="choices">
+      <button class="option" data-choice="A">A — A blue hoodie</button>
+      <button class="option" data-choice="B">B — White T-shirt</button>
+      <button class="option" data-choice="C">C — A red dress</button>
+      <button class="option" data-choice="D">D — Black jacket</button>
     </div>
   </div>
 
-  <!-- Wrong-answer overlay -->
-  <div id="wrongOverlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="face-wrap" aria-hidden="true">
-      <!-- animated SVG angry-sad face -->
-      <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g1" x1="0" x2="1">
-            <stop offset="0" stop-color="#ff9aa2"/>
-            <stop offset="1" stop-color="#ff2d6f"/>
-          </linearGradient>
-        </defs>
-        <g>
-          <circle cx="60" cy="60" r="54" fill="url(#g1)" />
-          <!-- eyes -->
-          <g id="eyes" transform="translate(0,0)">
-            <rect id="leftEye" x="34" y="45" width="12" height="8" rx="4" fill="#fff"/>
-            <rect id="rightEye" x="74" y="45" width="12" height="8" rx="4" fill="#fff"/>
-          </g>
-          <!-- mouth -->
-          <path id="mouth" d="M40 82 Q60 62 80 82" stroke="#330000" stroke-width="4" stroke-linecap="round" fill="none"/>
-          <!-- steam lines (angry vibe) -->
-          <g id="steam" opacity="0.9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-            <path d="M18 26 C26 22, 26 36, 34 32" stroke-opacity="0.18"/>
-            <path d="M100 26 C92 22, 92 36, 84 32" stroke-opacity="0.18"/>
-          </g>
-        </g>
-      </svg>
-    </div>
-    <p id="wrongText" style="font-weight:700; font-size:18px;">Try again 😡</p>
-    <div>
-      <button class="option-btn secondary" id="tryAgainBtn">Try Again</button>
+  <div id="q2" style="display:none;">
+    <p><strong>Will you be my Valentine?</strong></p>
+    <div class="choices">
+      <button id="yes">Yes 💖</button>
+      <button id="no">No 😢</button>
     </div>
   </div>
 
-  <!-- "hurting feelings" overlay -->
-  <div id="hurtOverlay" class="overlay" role="status" aria-hidden="true">
-    <p id="hurtText" style="font-weight:700; font-size:17px;">You are hurting my feelings and I care about you 💔</p>
-    <div>
-      <button class="option-btn secondary" id="hurtOkBtn">Okay...</button>
-    </div>
-  </div>
+  <div id="finalBox"></div>
+</div>
 
-  <!-- final happy overlay (optional) -->
-  <div id="happyOverlay" class="overlay" role="dialog" aria-hidden="true">
-    <p style="font-weight:800; font-size:20px;">Happy Valentine's Day! 🌹</p>
-    <div style="margin-top:8px; font-size:15px; color:#fff;">Open your special message below 💖</div>
-    <div style="margin-top:14px;">
-      <button class="option-btn" id="openHeartBtn">Read it 💌</button>
-    </div>
-  </div>
+<div id="overlay" class="overlay"></div>
 
 <script>
-/* ------------------------
-   Behavior and interactions
-   ------------------------ */
+const q1 = document.getElementById('q1');
+const q2 = document.getElementById('q2');
+const overlay = document.getElementById('overlay');
+const finalBox = document.getElementById('finalBox');
 
-(function(){
-  // DOM references
-  const choiceButtons = document.querySelectorAll('.option-btn[data-choice]');
-  const wrongOverlay = document.getElementById('wrongOverlay');
-  const tryAgainBtn = document.getElementById('tryAgainBtn');
-  const q1 = document.getElementById('q1');
-  const q2 = document.getElementById('q2');
-  const btnYes = document.getElementById('btnYes');
-  const btnNo = document.getElementById('btnNo');
-  const hurtOverlay = document.getElementById('hurtOverlay');
-  const hurtOkBtn = document.getElementById('hurtOkBtn');
-  const happyOverlay = document.getElementById('happyOverlay');
-  const openHeartBtn = document.getElementById('openHeartBtn');
-  const finalBox = document.getElementById('finalBox');
-  const audioHint = document.getElementById('soundState');
-
-  // Your long heartfelt message (exactly as user provided, lightly corrected for grammar/typos)
-  const heartfelt = `Hi baby happy valentines day, I know the past few days hasn't been the best for us and we have been fighting a lot but even though sometimes it was my fault you decided to put your ego aside and still said sorry to me. I'm really grateful for that. I hope you're my Valentine for the rest of the upcoming Valentines I'll get in my life until I die. I love you so much baby 💖`;
-
-  // initial: choices
-  choiceButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const choice = btn.dataset.choice;
-      if (choice === 'C') {
-        // correct -> advance to q2
-        showQ2();
-      } else {
-        // wrong -> show angry/sad popup
-        showWrongPopup();
-      }
-    });
-  });
-
-  function showWrongPopup() {
-    wrongOverlay.classList.add('show');
-    wrongOverlay.setAttribute('aria-hidden', 'false');
-    // animate the face a little (eyes narrow / mouth change) to simulate anger
-    animateAngryFace();
-  }
-
-  tryAgainBtn.addEventListener('click', () => {
-    wrongOverlay.classList.remove('show');
-    wrongOverlay.setAttribute('aria-hidden', 'true');
-  });
-
-  function showQ2() {
-    q1.style.display = 'none';
-    q2.style.display = 'block';
-    // small nudge in UI
-    q2.scrollIntoView({behavior:'smooth', block:'center'});
-  }
-
-  // No button behavior: show "you are hurting my feelings and i care about you"
-  btnNo.addEventListener('click', () => {
-    hurtOverlay.classList.add('show');
-    hurtOverlay.setAttribute('aria-hidden', 'false');
-    // shake the overlay for emotional effect
-    hurtOverlay.classList.remove('shake');
-    void hurtOverlay.offsetWidth;
-    hurtOverlay.classList.add('shake');
-  });
-
-  hurtOkBtn.addEventListener('click', () => {
-    hurtOverlay.classList.remove('show');
-    hurtOverlay.setAttribute('aria-hidden', 'true');
-  });
-
-  // Yes behavior -> show happy overlay then reveal message
-  btnYes.addEventListener('click', () => {
-    happyOverlay.classList.add('show');
-    happyOverlay.setAttribute('aria-hidden','false');
-  });
-
-  openHeartBtn.addEventListener('click', () => {
-    happyOverlay.classList.remove('show');
-    happyOverlay.setAttribute('aria-hidden','true');
-    // Show a short "Happy Valentine's Day" then the heartfelt message typed out
-    showFinalMessageSequence();
-  });
-
-  // final message reveal: happy + typing of heartfelt message
-  function showFinalMessageSequence(){
-    finalBox.style.display = 'block';
-    finalBox.innerHTML = `<div style="font-weight:800; font-size:20px; margin-bottom:10px;">Happy Valentine's Day! 🎉</div><div id="typed" class="typing"></div>`;
-    const typed = document.getElementById('typed');
-    typeText(typed, heartfelt, 30, () => {
-      // optional extra flourish: small confetti hearts
-      spawnHearts(40);
-    });
-  }
-
-  // Typing effect
-  function typeText(el, text, speed=30, cb){
-    el.textContent = '';
-    let i = 0;
-    const id = setInterval(() => {
-      el.textContent += text[i] === '\n' ? '\n' : text[i];
-      i++;
-      if (i >= text.length) {
-        clearInterval(id);
-        if (cb) cb();
-      }
-    }, speed);
-  }
-
-  /* -------------------------
-     Animated face functions
-     ------------------------- */
-
-  function animateAngryFace(){
-    // simple quick animation by toggling attrs in the SVG
-    const leftEye = document.getElementById('leftEye');
-    const rightEye = document.getElementById('rightEye');
-    const mouth = document.getElementById('mouth');
-
-    // change eyes to slanted rectangles and mouth to frown
-    leftEye.setAttribute('transform','rotate(-12 40 49)');
-    rightEye.setAttribute('transform','rotate(12 86 49)');
-    mouth.setAttribute('d','M40 82 Q60 92 80 82'); // frown becomes deeper
-
-    // revert after 1.2s
-    setTimeout(()=> {
-      leftEye.removeAttribute('transform');
-      rightEye.removeAttribute('transform');
-      mouth.setAttribute('d','M40 82 Q60 62 80 82'); // original
-    }, 1200);
-  }
-
-  /* ------------------------------------
-     Falling hearts background generator
-     ------------------------------------ */
-
-  // create hearts continuously
-  let heartInterval = null;
-
-  function spawnHearts(count=1) {
-    for (let i=0;i<count;i++){
-      createHeart();
+document.querySelectorAll('.option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.choice === 'C') {
+      q1.style.display = 'none';
+      q2.style.display = 'block';
+    } else {
+      overlay.innerHTML = '<p style="font-size:1.2rem;">😡 Try again! 😡</p><img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="120"><br><button onclick="overlay.style.display=\'none\'">OK</button>';
+      overlay.style.display = 'block';
     }
-  }
+  });
+});
 
-  function createHeart(){
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    // randomize size and position
-    const size = 18 + Math.random()*26; // px
-    heart.style.width = size + 'px';
-    heart.style.height = size + 'px';
-    const left = Math.random() * (window.innerWidth - size);
-    heart.style.left = left + 'px';
-    heart.style.top = (-50 - Math.random()*50) + 'px';
-    heart.style.opacity = (0.6 + Math.random()*0.4);
-    heart.style.transform = `rotate(${(Math.random()*60)-30}deg)`;
+const noBtn = document.getElementById('no');
+const yesBtn = document.getElementById('yes');
 
-    // fall duration and horizontal sway
-    const duration = 5000 + Math.random()*7000;
-    const sway = (Math.random()*120)-60;
+noBtn.addEventListener('click', () => {
+  overlay.innerHTML = '<p style="font-size:1.1rem;">💔 You are hurting my feelings and I care about you 💔</p><button onclick="overlay.style.display=\'none\'">Okay 😞</button>';
+  overlay.style.display = 'block';
+});
+
+yesBtn.addEventListener('click', () => {
+  q2.style.display = 'none';
+  finalBox.style.display = 'block';
+  finalBox.innerHTML = '<h2>Happy Valentine\'s Day! 💐</h2><p>Hi baby happy valentines day, I know the past few days hasn\'t been the best for us and we have been fighting a lot but even though sometimes it was my fault you decided to put your ego aside and still said sorry to me. I\'m really grateful for that. I hope you\'re my Valentine for the rest of the upcoming Valentines I\'ll get in my life until I die. I love you so much baby 💖</p>';
+  spawnHearts(30);
+});
+
+function spawnHearts(n){
+  for(let i=0;i<n;i++){
+    const heart=document.createElement('div');
+    heart.className='heart';
+    heart.style.left=Math.random()*100+'%';
+    heart.style.animationDuration=(3+Math.random()*3)+'s';
     document.body.appendChild(heart);
-
-    // animate using CSS transforms via JS for better randomization
-    const start = performance.now();
-    function animate(now){
-      const t = (now - start) / duration;
-      if (t >= 1) {
-        heart.remove();
-        return;
-      }
-      const y = t * (window.innerHeight + 120);
-      const x = left + Math.sin(t * Math.PI * 2) * (sway);
-      heart.style.transform = `translate(${x-left}px, ${y}px) rotate(${(t*360)+((Math.random()*30)-15)}deg)`;
-      heart.style.opacity = String(1 - t*0.9);
-      requestAnimationFrame(animate);
-    }
-    requestAnimationFrame(animate);
+    setTimeout(()=>heart.remove(),6000);
   }
-
-  // continuous spawn
-  heartInterval = setInterval(() => {
-    spawnHearts(Math.random() < 0.5 ? 1 : 2);
-  }, 700);
-
-  // initial warm cloud of hearts
-  spawnHearts(12);
-
-  /* ------------------------------------
-     Soothing auto-generated sound (WebAudio)
-     ------------------------------------ */
-
-  let audioCtx, master, osc1, osc2, gainNode, lfo;
-  let soundOn = true;
-
-  function startSoothingSound(){
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      master = audioCtx.createGain();
-      master.gain.value = 0.12;
-      master.connect(audioCtx.destination);
-
-      // two detuned sine oscillators to create a soft pad
-      osc1 = audioCtx.createOscillator();
-      osc1.type = 'sine';
-      osc1.frequency.value = 220; // A3
-
-      osc2 = audioCtx.createOscillator();
-      osc2.type = 'sine';
-      osc2.frequency.value = 277.18; // C#4 (slightly detuned)
-
-      // lowpass filter for softness
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 800;
-
-      // small amplitude LFO for breathing effect
-      lfo = audioCtx.createOscillator();
-      lfo.type = 'sine';
-      lfo.frequency.value = 0.18; // slow breath
-      const lfoGain = audioCtx.createGain();
-      lfoGain.gain.value = 0.06;
-
-      // connect nodes
-      osc1.connect(filter);
-      osc2.connect(filter);
-      filter.connect(master);
-
-      lfo.connect(lfoGain);
-      lfoGain.connect(master.gain); // modulate master volume slightly
-
-      // start
-      osc1.start();
-      osc2.start();
-      lfo.start();
-
-      // gentle detune drift using periodic automation
-      osc1.detune.setValueAtTime(0, audioCtx.currentTime);
-      osc2.detune.setValueAtTime(10, audioCtx.currentTime);
-
-      // fade in
-      master.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-      master.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 1.4);
-      soundOn = true;
-      audioHint.textContent = 'Soothing sound on';
-    } catch (err) {
-      console.warn('Audio context failed to start:', err);
-      audioHint.textContent = 'Sound unavailable';
-    }
-  }
-
-  function stopSoothingSound(){
-    if (!audioCtx) return;
-    master.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
-    setTimeout(()=> {
-      try {
-        osc1.stop();
-        osc2.stop();
-        lfo.stop();
-        audioCtx.close();
-      } catch(e){}
-      audioCtx = null;
-      soundOn = false;
-      audioHint.textContent = 'Soothing sound off';
-    }, 900);
-  }
-
-  // start on user interaction (browsers require user gesture to start audio)
-  const startAudioOnGesture = () => {
-    if (!audioCtx) startSoothingSound();
-    window.removeEventListener('click', startAudioOnGesture);
-    window.removeEventListener('touchstart', startAudioOnGesture);
-  };
-  window.addEventListener('click', startAudioOnGesture);
-  window.addEventListener('touchstart', startAudioOnGesture);
-
-  // toggle audio when clicking the small text
-  document.getElementById('audioHint').addEventListener('click', () => {
-    if (!audioCtx) startSoothingSound();
-    else if (soundOn) stopSoothingSound();
-    else startSoothingSound();
-  });
-
-  // small accessibility: allow Enter key to choose focused button
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && document.activeElement && document.activeElement.classList.contains('option-btn')) {
-      document.activeElement.click();
-    }
-  });
-
-  // make overlay close if clicked outside (for hurt/wrong)
-  [wrongOverlay, hurtOverlay, happyOverlay].forEach(o => {
-    o.addEventListener('click', (ev) => {
-      if (ev.target === o) {
-        o.classList.remove('show');
-        o.setAttribute('aria-hidden','true');
-      }
-    });
-  });
-
-  // small "Read it" after final message (openHeartBtn already wired)
-  // Also make "Try again" focusable
-  tryAgainBtn.focus();
-
-  // cleanup on unload
-  window.addEventListener('beforeunload', () => {
-    if (audioCtx) {
-      try { audioCtx.close(); } catch(e) {}
-    }
-  });
-
-  // Expose a small helper to spawn more hearts (used when message shown)
-  function spawnHeartsBurst(n){
-    for (let i=0;i<n;i++) setTimeout(()=> createHeart(), i*80);
-  }
-
-  // Slight flourish when typed finishes: spawn hearts and small pulse
-  function spawnHearts(n) {
-    spawnHeartsBurst(n || 20);
-  }
-
-  // Expose to global in case you want to call from console
-  window._valentine = { spawnHearts, createHeart };
-
-})();
+}
+setInterval(()=>spawnHearts(2),1000);
 </script>
-
 </body>
 </html>
