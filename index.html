@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Valentine Surprise</title>
+<title>The French Revolution</title>
+<link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_France.svg">
 <style>
   body {
     margin: 0;
@@ -28,7 +29,7 @@
     z-index: 10;
   }
   h1 {
-    font-size: 2.2rem;
+    font-size: 2.3rem;
     margin-bottom: 15px;
     text-shadow: 2px 2px 10px rgba(255,255,255,0.5);
   }
@@ -47,8 +48,8 @@
   #yes {
     background-color: #fff;
     color: #e60050;
-    font-size: 1.3rem;
-    padding: 14px 30px;
+    font-size: 1.4rem;
+    padding: 15px 32px;
     transform: scale(1.1);
   }
   #yes:hover {
@@ -59,11 +60,9 @@
   #no {
     background-color: #fff;
     color: #e60050;
-    position: relative;
+    position: absolute;
   }
-  #no:hover {
-    background-color: #ffcccc;
-  }
+  #no:hover { background-color: #ffcccc; }
   .choices {
     display: flex;
     flex-wrap: wrap;
@@ -125,10 +124,15 @@
 </head>
 <body>
 
+<!-- soft slow tune (royalty-free piano) -->
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/07/25/audio_85d2c1aeb5.mp3" type="audio/mpeg">
+</audio>
+
 <div class="card">
   <h1>💘💘</h1>
   <div id="q1">
-    <p><strong>lets see how much you know me first shaan eta na parle ami koshto pabo What’s my favorite cake flavor?</strong></p>
+    <p><strong>lets see how much you know me first shaan eta na parle ami koshto pabo 😤<br>What’s my favorite cake flavor?</strong></p>
     <div class="choices">
       <button class="option" data-choice="A">A — Chocolate cake</button>
       <button class="option" data-choice="B">B — Vanilla cake</button>
@@ -139,7 +143,7 @@
 
   <div id="q2" style="display:none;">
     <p><strong>Will you be my Valentine?</strong></p>
-    <div class="choices" id="valentineChoices">
+    <div class="choices" id="valentineChoices" style="height:150px; position:relative;">
       <button id="yes">Yes 💖</button>
       <button id="no">No 😢</button>
     </div>
@@ -151,50 +155,57 @@
 <div id="overlay" class="overlay"></div>
 
 <script>
-const q1 = document.getElementById('q1');
-const q2 = document.getElementById('q2');
-const overlay = document.getElementById('overlay');
-const finalBox = document.getElementById('finalBox');
-const noBtn = document.getElementById('no');
-const yesBtn = document.getElementById('yes');
+const q1=document.getElementById('q1');
+const q2=document.getElementById('q2');
+const overlay=document.getElementById('overlay');
+const finalBox=document.getElementById('finalBox');
+const noBtn=document.getElementById('no');
+const yesBtn=document.getElementById('yes');
+const bgm=document.getElementById('bgm');
 
-document.querySelectorAll('.option').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (btn.dataset.choice === 'C') {
-      q1.style.display = 'none';
-      q2.style.display = 'block';
-    } else {
-      overlay.innerHTML = '<p style="font-size:1.2rem;">😡 Try again! 😡</p><img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="140"><br><button onclick="overlay.style.display=\'none\'">OK</button>';
-      overlay.style.display = 'block';
+document.querySelectorAll('.option').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    bgm.play(); // start soft tune on first click
+    if(btn.dataset.choice==='C'){
+      q1.style.display='none';
+      q2.style.display='block';
+    }else{
+      overlay.innerHTML='<p style="font-size:1.2rem;">😡 Try again! 😡</p><img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="140"><br><button onclick="overlay.style.display=\'none\'">OK</button>';
+      overlay.style.display='block';
     }
   });
 });
 
-// make No button fly away
-noBtn.addEventListener('mouseover', () => {
-  const cardRect = document.querySelector('.card').getBoundingClientRect();
-  const x = Math.random() * (cardRect.width - 100);
-  const y = Math.random() * (cardRect.height - 50);
-  noBtn.style.position = 'absolute';
-  noBtn.style.left = x + 'px';
-  noBtn.style.top = y + 'px';
+// make No button dodge cursor
+noBtn.addEventListener('mouseenter',()=>{
+  const container=document.getElementById('valentineChoices');
+  const rect=container.getBoundingClientRect();
+  const btnRect=noBtn.getBoundingClientRect();
+  const maxX=rect.width-btnRect.width;
+  const maxY=rect.height-btnRect.height;
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
+  noBtn.style.transition='all 0.3s ease';
+  noBtn.style.left=x+'px';
+  noBtn.style.top=y+'px';
+  noBtn.style.position='absolute';
 });
 
-yesBtn.addEventListener('click', () => {
-  q2.style.display = 'none';
-  finalBox.style.display = 'block';
-  finalBox.innerHTML = '<h2>Happy Valentine\'s Day! 💐</h2><p>Hi baby, happy Valentine’s Day! I know the past few days haven’t been the best for us and we’ve been fighting a lot, but even though sometimes it was my fault, you put your ego aside and still said sorry to me. I’m really grateful for that. I hope you’ll be my Valentine for all the ones to come in my life until I die. I love you so much, baby 💖</p>';
+yesBtn.addEventListener('click',()=>{
+  q2.style.display='none';
+  finalBox.style.display='block';
+  finalBox.innerHTML='<h2>Happy Valentine\\'s Day! 💐</h2><p>Hi baby, happy Valentine’s Day! I know the past few days haven’t been the best for us and we’ve been fighting a lot, but even though sometimes it was my fault, you put your ego aside and still said sorry to me. I’m really grateful for that. I hope you’ll be my Valentine for all the ones to come in my life until I die. I love you so much, baby 💖</p>';
   spawnHearts(30);
 });
 
 function spawnHearts(n){
   for(let i=0;i<n;i++){
-    const heart=document.createElement('div');
-    heart.className='heart';
-    heart.style.left=Math.random()*100+'%';
-    heart.style.animationDuration=(3+Math.random()*3)+'s';
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
+    const h=document.createElement('div');
+    h.className='heart';
+    h.style.left=Math.random()*100+'%';
+    h.style.animationDuration=(3+Math.random()*3)+'s';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
   }
 }
 setInterval(()=>spawnHearts(2),1000);
